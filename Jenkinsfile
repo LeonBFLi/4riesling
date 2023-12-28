@@ -6,15 +6,14 @@ pipeline {
             steps {
                 script {
                     // Create a temporary directory for the job
-                    def tempDir = pwd()
+                    def tempDir = '/tmp/jenkins_workstation'
 
-                    // Change directory to the temporary directory
+                    // Change directory to the workstation directory
                     dir(tempDir) {
                         // Explicitly checkout the 'main' branch
                         checkout([$class: 'GitSCM', branches: [[name: 'main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'webserver_cred', url: 'https://github.com/LeonBFLi/riesling_site.git']]])
-
-                        // Move contents to the root of the workspace
-                        sh 'mv * $WORKSPACE/'
+                        sh 'whoami; mv ./riesling_site/* .; rm -rf riesling_site'
+                    
 
                         // Copy files to the target server using SCP
                         sh 'scp -rp * root@3.27.239.89:/var/www/html/'
