@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     // Create a temporary directory for the job
-                    def tempDir = checkout([$class: 'WorkspaceCleanup'])
+                    def tempDir = pwd()
 
                     // Change directory to the temporary directory
                     dir(tempDir) {
