@@ -10,8 +10,8 @@ pipeline {
 
                     // Change directory to the temporary directory
                     dir(tempDir) {
-                        // Clone the Git repository
-                        git url: 'https://github.com/LeonBFLi/riesling_site.git'
+                        // Explicitly checkout the 'main' branch
+                        checkout([$class: 'GitSCM', branches: [[name: 'main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'webserver_cred', url: 'https://github.com/LeonBFLi/riesling_site.git']]])
 
                         // Move contents to the root of the workspace
                         sh 'mv * $WORKSPACE/'
