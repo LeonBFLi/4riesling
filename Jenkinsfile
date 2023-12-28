@@ -12,7 +12,7 @@ pipeline {
                     dir(tempDir) {
                         // Explicitly checkout the 'main' branch
                         checkout([$class: 'GitSCM', branches: [[name: 'main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'webserver_cred', url: 'https://github.com/LeonBFLi/riesling_site.git']]])
-                        sh 'whoami; mv ./riesling_site/* .; rm -rf riesling_site'
+                        sh 'whoami; ls; mv ./riesling_site/* .; rm -rf riesling_site'
                     
 
                         // Copy files to the target server using SCP
