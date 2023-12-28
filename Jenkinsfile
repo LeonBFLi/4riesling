@@ -1,23 +1,33 @@
 pipeline {
     agent any
+
     stages {
-        stage('Checkout') {
+        stage('Clone and Deploy') {
             steps {
                 script {
-                    // Checkout the source code from the Git repository
-                    git 'https://github.com/LeonBFLi/riesling_site.git'
-                }
-            }
-        }
-        stage('Deploy to Webserver') {
-            steps {
-                script {
-                    // Use SSH to copy files to the Webserver
-                    sshagent(credentials: ['webserver_cred']) {
-                        sh 'scp -r ./web-content/* ec2-user@webserver-ip:/path/to/webserver/'
+                    // Create a temporary directory for the job
+                    def tempDir = checkout([$class: 'WorkspaceCleanup'])
+
+                    // Change directory to the temporary directory
+                    dir(tempDir) {
+                        // Clone the Git repository
+                        git url: 'https://github.com/LeonBFLi/riesling_site.git'
+
+                        // Move contents to the root of the workspace
+                        sh 'mv * $WORKSPACE/'
+
+                        // Copy files to the target server using SCP
+                        sh 'scp -rp * root@3.27.239.89:/var/www/html/'
+
+                        // Clean up temporary directory
+                        sh 'rm -rf *'
                     }
+
+                    // Restart Apache on the target server
+                    sh 'ssh root@3.27.239.89 "systemctl restart httpd"'
                 }
             }
         }
     }
 }
+
