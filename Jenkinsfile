@@ -1,25 +1,37 @@
 pipeline {
     agent any
 
+    environment {
+        TEMP_DIR = '/tmp/jenkins_workstation'
+        REPO_URL = 'https://github.com/LeonBFLi/riesling_site.git'
+        TARGET_SERVER = 'root@3.27.239.89:/var/www/html/'
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
                 script {
-                    // Create a temporary directory for the job
-                    def tempDir = '/tmp/jenkins_workstation'
+                    def repoDir = "${TEMP_DIR}/repository"
 
-                    // Change directory to the workstation directory
-                    dir(tempDir) {
-                        // Explicitly checkout the 'main' branch
-                        checkout([$class: 'GitSCM', branches: [[name: 'main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'webserver_cred', url: 'https://github.com/LeonBFLi/riesling_site.git']]])
-                    
-                        // Copy files to the target server using SCP
-                        sh 'sudo su - jenkins_user -c "cd /tmp/jenkins_workstation; scp -rp * root@3.27.239.89:/var/www/html/"'
-                    
+                    catchError {
+                        // Change directory to the workstation directory
+                        dir(repoDir) {
+                            checkout([
+                                $class: 'GitSCM',
+                                branches: [[name: 'main']],
+                                doGenerateSubmoduleConfigurations: false,
+                                extensions: [[$class: 'CleanBeforeCheckout']],
+                                submoduleCfg: [],
+                                userRemoteConfigs: [[credentialsId: 'webserver_cred', url: REPO_URL]]
+                            ])
 
-                        // Clean up temporary directory
-                        sh 'rm -rf *'
+                            // Copy files to the target server using SCP
+                            sh "sudo su - jenkins_user -c 'cd ${repoDir}; scp -rp * ${TARGET_SERVER}'"
+                        }
                     }
+
+                    // Clean up temporary directory, regardless of errors during previous steps
+                    sh "rm -rf ${repoDir}"
                 }
             }
         }
@@ -27,10 +39,19 @@ pipeline {
         stage('Restart HTTPD Service') {
             steps {
                 script {
-                    // Restart Apache on the target server
-                    sh 'sudo su - jenkins_user -c "ssh root@3.27.239.89 \'systemctl restart httpd\'"'
+                    catchError {
+                        // Restart Apache on the target server
+                        sh "sudo su - jenkins_user -c 'ssh ${TARGET_SERVER} \\\'systemctl restart httpd\\\' '"
+                    }
                 }
             }
+        }
+    }
+
+    post {
+        failure {
+            // This block will be executed if any of the previous stages fail
+            echo "One or more stages have failed. Check the Jenkins console output for details."
         }
     }
 }
