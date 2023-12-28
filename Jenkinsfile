@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     // Restart Apache on the target server
-                    sh 'sudo su - jenkins_user -c "ssh root@3.27.239.89 "systemctl restart httpd""'
+                    sh 'sudo su - jenkins_user -c "ssh root@3.27.239.89 'systemctl restart httpd'"'
                 }
             }
         }
