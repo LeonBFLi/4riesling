@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone and Deploy') {
+        stage('Clone Repository') {
             steps {
                 script {
                     // Create a temporary directory for the job
@@ -20,12 +20,17 @@ pipeline {
                         // Clean up temporary directory
                         sh 'rm -rf *'
                     }
+                }
+            }
+        }
 
+        stage('Restart HTTPD Service') {
+            steps {
+                script {
                     // Restart Apache on the target server
-                    sh 'ssh root@3.27.239.89 "systemctl restart httpd"'
+                    sh 'sudo su - jenkins_user -c "ssh root@3.27.239.89 "systemctl restart httpd""'
                 }
             }
         }
     }
 }
-
