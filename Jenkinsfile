@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     catchError {
-                        sh 'sudo su - jenkins_user -c "ssh root@3.27.239.89 \'systemctl restart httpd\'"'
+                        sh 'sudo ansible-playbook restart_httpd.yml'
                     }
                 }
             }
@@ -44,24 +44,10 @@ pipeline {
             echo 'Pipeline completed. Check the Jenkins console output for details.'
         }
         success {
-            echo 'Pipeline succeeded. Deployment was successful.'
-            
-            // Send email notification on success
-            emailext subject: 'Pipeline Successful: Deployment Completed',
-                      body: 'The deployment pipeline has completed successfully. The web content has been deployed.',
-                      to: 'libofan1995@163.com',
-                      replyTo: 'jenkins@example.com',
-                      mimeType: 'text/html'
+            echo 'Pipeline succeeded. Deployment was successful.'           
         }
         failure {
             echo 'Pipeline failed. Review the error message above for troubleshooting.'
-            
-            // Send email notification on failure
-            emailext subject: 'Pipeline Failed: Deployment Issues',
-                      body: 'The deployment pipeline has failed. Please review the Jenkins console output for details.',
-                      to: 'libofan1995@163.com',
-                      replyTo: 'jenkins@example.com',
-                      mimeType: 'text/html'
         }
     }
 }
