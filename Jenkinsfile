@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     catchError {
-                        sh 'sudo su - "ansible-playbook restart_httpd.yml"'
+                        sh 'sudo su - "ansible-playbook /etc/ansible/restart_httpd.yml"'
                     }
                 }
             }
