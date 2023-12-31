@@ -7,5 +7,8 @@ WORKDIR /var/www/html
 # Copy your custom HTML files into the image
 COPY ./* /var/www/html
 
+# Restart Apache service
+CMD ["apachectl", "graceful"]
+
 # (Optional) Expose port 80 if not already exposed by the base image
 EXPOSE 80
