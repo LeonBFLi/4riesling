@@ -1,12 +1,12 @@
 # Use the official Apache HTTP Server image as the base image
-FROM httpd:latest
+FROM nginx:latest
 
 # Set the working directory to the Apache document root
-WORKDIR /var/www/html
+WORKDIR /usr/share/nginx/html
 
 # Copy your custom HTML files into the image
-COPY ./* /var/www/html
+COPY ./* /usr/share/nginx/html
 
 # Restart Apache service
-CMD ["apachectl", "graceful"]
+CMD ["service", "nginx", "restart"]
 
