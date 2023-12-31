@@ -8,4 +8,5 @@ WORKDIR /var/www/html
 COPY ./* /var/www/html
 
 # Restart Apache service
+CMD ["apachectl", "graceful"]
 
