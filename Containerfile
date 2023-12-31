@@ -8,5 +8,5 @@ WORKDIR /usr/share/nginx/html
 COPY ./* /usr/share/nginx/html
 
 # Restart Apache service
-CMD ["service", "nginx", "restart"]
+
 
