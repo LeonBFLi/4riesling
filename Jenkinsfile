@@ -18,7 +18,7 @@ pipeline {
                                 userRemoteConfigs: [[credentialsId: 'webserver_cred', url: 'https://github.com/LeonBFLi/riesling_site.git']]
                             ])
 
-                            sh 'sudo cd /tmp/jenkins_workstation; scp -rp * root@54.206.15.84:~/project"'
+                            sh 'sudo cd /tmp/jenkins_workstation; scp -rp * root@54.206.15.84:~/project'
                         }
 
                         // Clean up temporary directory
