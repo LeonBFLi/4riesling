@@ -1,3 +1,4 @@
+Access the page via: http://54.206.15.84
 Current Deployment Workflow for this Repository:
 
 1. A developer commits code changes to this GitHub repository.
