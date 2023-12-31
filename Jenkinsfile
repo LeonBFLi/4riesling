@@ -28,11 +28,11 @@ pipeline {
             }
         }
 
-        stage('Restart HTTPD Service') {
+        stage('Check container sitautions') {
             steps {
                 script {
                     catchError {
-                        sh 'sudo su - -c "ansible-playbook /etc/ansible/restart_httpd.yml"'
+                        sh 'sudo su - -c "podman ps"'
                     }
                 }
             }
