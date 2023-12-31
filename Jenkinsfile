@@ -18,7 +18,7 @@ pipeline {
                                 userRemoteConfigs: [[credentialsId: 'webserver_cred', url: 'https://github.com/LeonBFLi/riesling_site.git']]
                             ])
 
-                            sh 'sudo cd /tmp/jenkins_workstation; whoami; scp -o StrictHostKeyChecking=no -rp * root@54.206.15.84:~/project'
+                            sh 'sudo cd /tmp/jenkins_workstation; sudo scp -o StrictHostKeyChecking=no -rp * root@54.206.15.84:~/project'
                         }
 
                         // Clean up temporary directory
@@ -28,11 +28,11 @@ pipeline {
             }
         }
 
-        stage('Check container sitautions') {
+        stage('Trigger Ansible deployment') {
             steps {
                 script {
                     catchError {
-                        sh 'sudo su - -c "podman ps"'
+                        sh 'sudo su - -c "ansible-playbook /etc/ansible/build_n_deploy_container.yml"'
                     }
                 }
             }
