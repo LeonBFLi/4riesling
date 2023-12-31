@@ -33,10 +33,21 @@ pipeline {
                 script {
                     catchError {
                         sh 'sudo su - -c "ansible-playbook /etc/ansible/build_n_deploy_container.yml"'
-                    }
-                }
-            }
-        }
+                    }//catchError
+                }//script
+            }//steps
+        }//stage
+
+        stage('Clearn up prodserver env') {
+            steps {
+                script {
+                    catchError {
+                        sh 'ssh root@prod "rm -rf ~/project/*"'
+                    }//catchError
+                }//script
+            }//steps
+        }//stage
+        
     }
 
     post {
