@@ -5,7 +5,7 @@ FROM nginx:latest
 WORKDIR /usr/share/nginx/html
 
 # Copy your custom HTML files into the image
-COPY ./* /usr/share/nginx/html
+COPY * /usr/share/nginx/html
 
 # Restart Apache service
 
