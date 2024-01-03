@@ -42,7 +42,7 @@ pipeline {
             steps {
                 script {
                     catchError {
-                        sh '##ssh root@prod "rm -rf ~/project/*"'
+                        sh 'ssh root@prod "rm -rf ~/project/*"'
                     }//catchError
                 }//script
             }//steps
