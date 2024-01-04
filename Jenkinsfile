@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     catchError {
-                        sh 'sudo su - -c -vv "ansible-playbook /etc/ansible/build_n_deploy_container.yml"'
+                        sh 'sudo su - -c -v "ansible-playbook /etc/ansible/build_n_deploy_container.yml"'
                     }//catchError
                 }//script
             }//steps
