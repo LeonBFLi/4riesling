@@ -17,4 +17,9 @@ Some quick notes from Leon:
 - The Podman Ansible module seems to be troublesome and could introduce privilege issues from time to time. As a workaround, plain shell commands are used in the Ansible playbook.
 - The Podman bridge network seems incapable of handling hostname resolution, so the `ip_address_updator` script is introduced to address that issue.
 
-Leon
+Here is a quick diagram regarding what is happenning behind this repo:
+
+![Diagram](https://github.com/LeonBFLi/riesling_site/assets/88610487/9d5f5f49-8fe6-4251-97d3-33ae49d9be0d)
+
+
+
