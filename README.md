@@ -3,7 +3,7 @@ Current Deployment Workflow for this Repository:
 
 1. Developers commit code changes to this GitHub repository.
 2. A GitHub Webhook triggers an event.
-3. The EC2 Jenkins server clones the repository and transfers all files to the EC2 production server.
+3. The EC2 Jenkins server clones the repository and transfers all files to the EC2 production server~
 4. An Ansible playbook is executed to build an Nginx image with the updated code (located at `jenkins:/etc/ansible/build_n_deploy_container.yml`).
 5. The Ansible playbook implements a rolling update strategy to deploy the code.
 
