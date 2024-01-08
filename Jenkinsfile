@@ -37,12 +37,11 @@ pipeline {
             steps {
                 script {
                     catchError {
-                        //sh 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'
-                            withCredentials([sshUserPrivateKey(credentialsId: 'prod_ec2-user', keyFileVariable: 'SSH_KEY')]) {
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ec2-user@${HOST} 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'"
-                            }//withCredentials
+                        withCredentials([sshUserPrivateKey(credentialsId: 'prod_ec2-user', keyFileVariable: 'SSH_KEY')]) {
+                            sh """ssh -o StrictHostKeyChecking=no -i \${SSH_KEY} ec2-user@${HOST} 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'"""
+                        }//withCredentials
                     }//catchError
-                }//script
+               }//script
             }//steps
         }//stage
 
