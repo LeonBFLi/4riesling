@@ -38,9 +38,9 @@ pipeline {
                 script {
                     catchError {
                         //sh 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'
-                        sshagent(['prod']) {
-                        sh "ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ec2-user@${HOST} 'ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml'"
-                    }
+                            withCredentials([sshUserPrivateKey(credentialsId: 'prod', keyFileVariable: 'SSH_KEY')]) {
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ec2-user@${HOST} 'ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml'"
+                            }//withCredentials
                     }//catchError
                 }//script
             }//steps
