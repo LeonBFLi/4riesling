@@ -1,11 +1,5 @@
 pipeline {
     agent any
-
-
-    environment {
-        SSH_KEY = credentials('ec2-user')
-        HOST = 'prod'
-    }
     stages {
         stage('Clone Repository') {
             steps {
@@ -20,7 +14,7 @@ pipeline {
                                 doGenerateSubmoduleConfigurations: false,
                                 extensions: [[$class: 'CleanBeforeCheckout']],
                                 submoduleCfg: [],
-                                userRemoteConfigs: [[credentialsId: 'prod', url: 'https://github.com/LeonBFLi/riesling_site.git']]
+                                userRemoteConfigs: [[credentialsId: 'webserver_cred', url: 'https://github.com/LeonBFLi/riesling_site.git']]
                             ])
 
                             sh 'sudo cd /tmp/jenkins_workstation; sudo chmod -R 755 /tmp/jenkins_workstation/*; sudo scp -o StrictHostKeyChecking=no -rp /tmp/jenkins_workstation/* root@prod:~/project'
@@ -37,11 +31,15 @@ pipeline {
             steps {
                 script {
                     catchError {
+<<<<<<< HEAD
                         withCredentials([sshUserPrivateKey(credentialsId: 'ec2-user', keyFileVariable: 'SSH_KEY')]) {
                             sh 'eval $(ssh-agent -s)'
                             sh 'ssh-add $SSH_KEY'
                             sh """ssh -o StrictHostKeyChecking=no -i \${SSH_KEY} ec2-user@${HOST} 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'"""
                         }//withCredentials
+=======
+                        sh 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'
+>>>>>>> parent of ed5e365 (Update Jenkinsfile)
                     }//catchError
                }//script
             }//steps
