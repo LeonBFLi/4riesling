@@ -3,7 +3,7 @@ pipeline {
 
 
     environment {
-        SSH_KEY = credentials('prod')
+        SSH_KEY = credentials('prod_ec2-user')
         HOST = 'prod'
     }
     stages {
@@ -38,8 +38,8 @@ pipeline {
                 script {
                     catchError {
                         //sh 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'
-                            withCredentials([sshUserPrivateKey(credentialsId: 'prod', keyFileVariable: 'SSH_KEY')]) {
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ec2-user@${HOST} 'ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml'"
+                            withCredentials([sshUserPrivateKey(credentialsId: 'prod_ec2-user', keyFileVariable: 'SSH_KEY')]) {
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ec2-user@${HOST} 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'"
                             }//withCredentials
                     }//catchError
                 }//script
