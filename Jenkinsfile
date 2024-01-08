@@ -38,6 +38,8 @@ pipeline {
                 script {
                     catchError {
                         withCredentials([sshUserPrivateKey(credentialsId: 'ec2-user', keyFileVariable: 'SSH_KEY')]) {
+                            sh 'eval $(ssh-agent -s)'
+                            sh 'ssh-add $SSH_KEY'
                             sh """ssh -o StrictHostKeyChecking=no -i \${SSH_KEY} ec2-user@${HOST} 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'"""
                         }//withCredentials
                     }//catchError
