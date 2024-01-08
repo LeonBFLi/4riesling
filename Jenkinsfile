@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     stages {
         stage('Clone Repository') {
             steps {
@@ -31,17 +32,9 @@ pipeline {
             steps {
                 script {
                     catchError {
-<<<<<<< HEAD
-                        withCredentials([sshUserPrivateKey(credentialsId: 'ec2-user', keyFileVariable: 'SSH_KEY')]) {
-                            sh 'eval $(ssh-agent -s)'
-                            sh 'ssh-add $SSH_KEY'
-                            sh """ssh -o StrictHostKeyChecking=no -i \${SSH_KEY} ec2-user@${HOST} 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'"""
-                        }//withCredentials
-=======
                         sh 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'
->>>>>>> parent of ed5e365 (Update Jenkinsfile)
                     }//catchError
-               }//script
+                }//script
             }//steps
         }//stage
 
