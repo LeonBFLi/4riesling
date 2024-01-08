@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+
+    environment {
+        SSH_KEY = credentials('prod')
+        HOST = 'prod'
+    }
     stages {
         stage('Clone Repository') {
             steps {
@@ -15,7 +20,7 @@ pipeline {
                                 doGenerateSubmoduleConfigurations: false,
                                 extensions: [[$class: 'CleanBeforeCheckout']],
                                 submoduleCfg: [],
-                                userRemoteConfigs: [[credentialsId: 'webserver_cred', url: 'https://github.com/LeonBFLi/riesling_site.git']]
+                                userRemoteConfigs: [[credentialsId: 'prod', url: 'https://github.com/LeonBFLi/riesling_site.git']]
                             ])
 
                             sh 'sudo cd /tmp/jenkins_workstation; sudo chmod -R 755 /tmp/jenkins_workstation/*; sudo scp -o StrictHostKeyChecking=no -rp /tmp/jenkins_workstation/* root@prod:~/project'
@@ -32,7 +37,10 @@ pipeline {
             steps {
                 script {
                     catchError {
-                        sh 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'
+                        //sh 'sudo su - -c "ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml"'
+                        sshagent(['prod']) {
+                        sh "ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ec2-user@${HOST} 'ansible-playbook -i /etc/ansible/inventory /etc/ansible/build_n_deploy_container.yml'"
+                    }
                     }//catchError
                 }//script
             }//steps
