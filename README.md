@@ -19,7 +19,8 @@ Some quick notes from Leon:
 
 Here is a quick diagram regarding what is happenning behind this repo:
 
-![Diagram](https://github.com/LeonBFLi/riesling_site/assets/88610487/9d5f5f49-8fe6-4251-97d3-33ae49d9be0d)
+<img width="539" alt="Updated project workflow" src="https://github.com/LeonBFLi/riesling_site/assets/88610487/60db3684-5b6c-4ff0-96bd-b6793ffa57e7">
+
 
 
 
