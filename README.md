@@ -1,4 +1,6 @@
-Access the page via: [http://3.106.218.235:8084/](http://3.106.218.235:8084/)
+Access the page via: 
+[http://3.106.218.235:8084/](http://3.106.218.235:8084/)
+EFK project system access: http://47.104.87.111:5601/
 Current Deployment Workflow for this Repository:
 
 1. Developers commit code changes to this GitHub repository.
